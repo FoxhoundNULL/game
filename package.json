@@ -1,0 +1,13 @@
+{
+  "name": "game",
+  "version": "0.0.1",
+  "description": "a game, everything TBD",
+  "devDependencies": {
+    "gulp": "~3.8.11",
+    "browser-sync": "~2.0.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  }
+}
