@@ -22,12 +22,13 @@ requirejs([
   'backbone',
   'pixi',
   'views/mainView',
-  'views/misc/bunnyView',
-  'views/misc/dungeonGeneratorView'
-], function (_, $, Backbone, PIXI, Main, Bunny, DungeonGenerator) {
+  'views/global/controlsView',
+  'views/misc/dungeonGeneratorView',
+], function (_, $, Backbone, PIXI, Main, Controls, DungeonGenerator) {
 
   window.MAIN = new Main();
-  new Bunny();
+
+  new Controls();
   new DungeonGenerator();
 
 });

@@ -8,8 +8,8 @@ define([
   return {
     stageColor: 0xDDDDDD,
     renderer: {
-      width: 640,
-      height: 360
+      width: 720,
+      height: 480
     }
   }
 

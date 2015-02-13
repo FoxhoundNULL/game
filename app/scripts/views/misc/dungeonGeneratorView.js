@@ -9,21 +9,49 @@ define([
   var DungeonGenerator = Backbone.View.extend({
 
     map: [[]],
-    mapWidth: 64,
-    mapHeight: 64,
+    mapWidth: 72,
+    mapHeight: 48,
     initialWallChance: 0.4,
     becomeEmptyLimit: 3,
     becomeWallLimit: 4,
-    numSteps: 2,
+    numSteps: 8,
 
     initialize: function () {
+      this.generateMap();
+      this.render();
+      this.listenTo(Backbone, 'regen', this.regenMap);
+    },
+
+    regenMap: function () {
       this.generateMap();
       this.render();
     },
 
     render: function () {
+      MAIN.stage.removeChildren();
+      var tileOffsetX = Math.floor(MAIN.renderer.width / this.mapWidth);
+      var tileOffsetY = Math.floor(MAIN.renderer.height / this.mapHeight);
+
       for (var i = 0; i < this.map.length; i++) {
-       console.log(this.map[i]);
+        for (var j = 0; j < this.map[i].length; j++) {
+          if (this.map[i][j]) {
+            var x = tileOffsetX * j;
+            var y = tileOffsetX * i;
+            var tile = new PIXI.Graphics();
+            tile.beginFill(0x999999);
+            tile.drawRect(x, y, tileOffsetX, tileOffsetY);
+
+            MAIN.stage.addChild(tile);
+          }
+        }
+      }
+
+      // set up animation loop
+      requestAnimFrame(animate);
+
+      function animate () {
+        requestAnimFrame(animate);
+        MAIN.renderer.render(MAIN.stage);
       }
     },
 
@@ -39,15 +67,15 @@ define([
 
     initMap: function () {
       var map = [[]];
-      for (var x = 0; x < this.mapWidth; x++) {
+      for (var x = 0; x < this.mapHeight; x++) {
         map[x] = [];
-        for (var y = 0; y < this.mapHeight; y++){
+        for (var y = 0; y < this.mapWidth; y++){
           map[x][y] = 0;
         }
       } // 0 out the map
 
-      for (var x = 0; x < this.mapWidth; x++) {
-        for (var y = 0; y < this.mapHeight; y++) {
+      for (var x = 0; x < this.mapHeight; x++) {
+        for (var y = 0; y < this.mapWidth; y++) {
           if (Math.random() < this.initialWallChance) {
             map[x][y] = 1;
           }
