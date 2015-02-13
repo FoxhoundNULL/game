@@ -3,44 +3,31 @@
 // except for 'app' ones, which are in a sibling
 // directory.
 requirejs.config({
-  baseUrl: '../bower_components/',
   paths: {
-    lodash: 'lodash/lodash',
-    jquery: 'jquery/dist/jquery',
-    pixi: 'pixi/bin/pixi'
+    lodash: '../bower_components/lodash/lodash',
+    jquery: '../bower_components/jquery/dist/jquery',
+    backbone: '../bower_components/backbone/backbone',
+    pixi: '../bower_components/pixi/bin/pixi'
+  },
+  map: {
+    '*': {
+      'underscore': 'lodash' // so we can use lodash with modules that require backbone
+    }
   }
 });
 
 requirejs([
   'lodash',
   'jquery',
-  'pixi'
-], function (_, $, Pixi) {
-  var stage = new Pixi.Stage(0xCCCCCC);
-  var renderer = Pixi.autoDetectRenderer(640, 360);
-  document.body.appendChild(renderer.view);
+  'backbone',
+  'pixi',
+  'views/mainView',
+  'views/misc/bunnyView',
+  'views/misc/dungeonGeneratorView'
+], function (_, $, Backbone, PIXI, Main, Bunny, DungeonGenerator) {
 
-  // set up animation loop
-  requestAnimFrame(animate);
+  window.MAIN = new Main();
+  new Bunny();
+  new DungeonGenerator();
 
-  var texture = Pixi.Texture.fromImage('assets/images/bunny.png');
-  var bunny = new Pixi.Sprite(texture);
-
-  // center the sprites anchor point
-  bunny.anchor.x = 0.5;
-  bunny.anchor.y = 0.5;
-
-  // center the sprite
-  bunny.position.x = renderer.width / 2;
-  bunny.position.y = renderer.height / 2;
-
-  stage.addChild(bunny);
-
-  function animate() {
-      requestAnimFrame(animate);
-
-      bunny.rotation += 0.1;
-
-      renderer.render(stage);
-  }
 });
