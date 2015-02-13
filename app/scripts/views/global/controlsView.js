@@ -3,15 +3,15 @@ define([
   'jquery',
   'backbone',
   'pixi',
-  'views/dev/debugPanelView'
-], function (_, $, Backbone, PIXI, DebugPanel) {
+  'views/dev/debugPanelView',
+  'views/global/playerControlsView'
+], function (_, $, Backbone, PIXI, DebugPanel, PlayerControls) {
 
   var Controls = Backbone.View.extend({
 
     initialize: function () {
-      new DebugPanel({
-        el: $('#debugPanel')
-      });
+      new DebugPanel();
+      new PlayerControls();
     }
   });
   return Controls;

@@ -1,12 +1,16 @@
 <html>
   <head>
+    <link rel="stylesheet" href="styles/main.css">
     <script data-main="scripts/main" src="bower_components/requirejs/require.js"></script>
   </head>
   <body>
 
     <!-- TEMPLATES -->
     <script type="text/template" class="template" data-template-name="debugPanel">
-      <a class="regen" href="#">Regenerate Dungeon</a>
+      <div class="debugPanel">
+        <a class="regen" href="#">Regenerate Dungeon</a>
+        <div class="lastAction" />
+      </div>
     </script>
     <!-- END TEMPLATES -->
 
