@@ -3,10 +3,6 @@ var browserSync = require('browser-sync');
 
 var reload = browserSync.reload;
 
-gulp.task('default', function() {
-  // place code for your default task here
-});
-
 // watch files for changes and reload
 gulp.task('serve', function() {
   browserSync({
