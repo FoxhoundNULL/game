@@ -19,6 +19,14 @@ define([
 
     render: function () {
       document.body.appendChild(this.renderer.view);
+
+      // set up animation loop
+      requestAnimFrame(animate);
+
+      function animate () {
+        requestAnimFrame(animate);
+        MAIN.renderer.render(MAIN.stage);
+      }
     }
 
   });

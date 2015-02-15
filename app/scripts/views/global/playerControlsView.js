@@ -21,8 +21,7 @@ define([
     },
 
     keyDown: function (evt) {
-      evt.preventDefault();
-      this.keyEvents[evt.keyCode]();
+      this.keyEvents[evt.keyCode] && this.keyEvents[evt.keyCode]();
     },
 
     keyEvents: {

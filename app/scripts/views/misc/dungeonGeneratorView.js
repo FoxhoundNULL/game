@@ -15,11 +15,14 @@ define([
     becomeEmptyLimit: 3,
     becomeWallLimit: 4,
     numSteps: 8,
+    tileOffsetX: 0,
+    tileOffsetY: 0,
 
     initialize: function () {
       this.generateMap();
       this.render();
       this.listenTo(Backbone, 'regen', this.regenMap);
+      return this.map;
     },
 
     regenMap: function () {
@@ -29,29 +32,21 @@ define([
 
     render: function () {
       MAIN.stage.removeChildren();
-      var tileOffsetX = Math.floor(MAIN.renderer.width / this.mapWidth);
-      var tileOffsetY = Math.floor(MAIN.renderer.height / this.mapHeight);
+      this.tileOffsetX = Math.floor(MAIN.renderer.width / this.mapWidth);
+      this.tileOffsetY = Math.floor(MAIN.renderer.height / this.mapHeight);
 
       for (var i = 0; i < this.map.length; i++) {
         for (var j = 0; j < this.map[i].length; j++) {
           if (this.map[i][j]) {
-            var x = tileOffsetX * j;
-            var y = tileOffsetX * i;
+            var x = this.tileOffsetX * j;
+            var y = this.tileOffsetY * i;
             var tile = new PIXI.Graphics();
             tile.beginFill(0x999999);
-            tile.drawRect(x, y, tileOffsetX, tileOffsetY);
+            tile.drawRect(x, y, this.tileOffsetX, this.tileOffsetY);
 
             MAIN.stage.addChild(tile);
           }
         }
-      }
-
-      // set up animation loop
-      requestAnimFrame(animate);
-
-      function animate () {
-        requestAnimFrame(animate);
-        MAIN.renderer.render(MAIN.stage);
       }
     },
 
