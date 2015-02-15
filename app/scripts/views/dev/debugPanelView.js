@@ -16,9 +16,6 @@ define([
 
     initialize: function () {
       this.render();
-      this.listenTo(Backbone, 'movePlayer', _.bind(function (direction) {
-        this.$el.find('.lastAction').html('Player Moved ' + direction);
-      }, this));
     },
 
     render: function () {

@@ -8,18 +8,51 @@ define([
 
   var Player = Backbone.View.extend({
 
-    player: null,
+    playerSprite: null,
+    walkSpeed: 4,
 
     initialize: function (params) {
       this.env = params.env;
       this.render();
       this.listenTo(Backbone, 'regen', this.render);
-      this.listenTo(Backbone, 'movePlayer', this.move);
+      this.listenTo(Backbone, 'keysChanged', this.keysChanged);
+    },
+
+    keysChanged: function (keys) {
+      var dir = { x: 0, y: 0 };
+      // keys in opposite direction neutralize movement
+      if ((keys.left && keys.right) || (keys.up && keys.down)) {
+        return;
+      }
+      if (keys.left || keys.right) { // horizontal
+        dir.x = keys.left ? -1 : 1;
+      }
+      if (keys.up || keys.down) { // vertical
+        dir.y = keys.up ? -1: 1;
+      }
+      if (this.canMove(dir)) {
+        this.move(dir);
+      }
+    },
+
+    canMove: function (dir) {
+      var potentialCoords = {
+        x: this.playerSprite.position.x + (dir.x * this.walkSpeed),
+        y: this.playerSprite.position.y + (dir.y * this.walkSpeed),
+      };
+
+      var xMult = potentialCoords.x / MAIN.renderer.width;
+      var yMult = potentialCoords.y / MAIN.renderer.height;
+
+      var x = Math.round(xMult * this.env.mapWidth);
+      var y = Math.round(yMult * this.env.mapHeight);
+      var potentialMapSpot = this.env.map[y][x];
+      return !potentialMapSpot;
     },
 
     move: function (dir) {
-      console.log(dir);
-      console.log(this.player);
+      this.playerSprite.position.x += (dir.x * this.walkSpeed);
+      this.playerSprite.position.y += (dir.y * this.walkSpeed);
     },
 
     render: function () {
@@ -27,11 +60,13 @@ define([
       console.log(pos);
       var x = this.env.tileOffsetX * pos.y;
       var y = this.env.tileOffsetY * pos.x;
-      this.player = new PIXI.Graphics();
-      this.player.beginFill(0xFF0000);
-      this.player.drawRect(x, y, this.env.tileOffsetX, this.env.tileOffsetY);
+      this.playerSprite = new PIXI.Sprite.fromImage('../../assets/images/player.png');
 
-      MAIN.stage.addChild(this.player);
+      this.playerSprite.position.x = x;
+      this.playerSprite.position.y = y;
+      this.playerSprite.scale.set(0.25, 0.25);
+
+      MAIN.stage.addChild(this.playerSprite);
     },
 
     findSpawn: function () {
