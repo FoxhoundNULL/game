@@ -10,6 +10,7 @@ define([
 
     stage: null,
     renderer: null,
+    frame: 0,
 
     initialize: function () {
       this.stage = new PIXI.Stage(Config.stageColor);
@@ -21,10 +22,12 @@ define([
       document.body.appendChild(this.renderer.view);
 
       // set up animation loop
-      requestAnimFrame(animate);
+      requestAnimFrame(step);
 
-      function animate () {
-        requestAnimFrame(animate);
+      function step () {
+        this.frame = (this.frame < 60 ? this.frame + 1 : 1);
+        Backbone.trigger('step', frame);
+        requestAnimFrame(step);
         MAIN.renderer.render(MAIN.stage);
       }
     }

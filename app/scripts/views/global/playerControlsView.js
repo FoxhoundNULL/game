@@ -7,7 +7,7 @@ define([
 
   var PlayerControls = Backbone.View.extend({
 
-    keys: [],
+    keys: {},
 
     el: $('body'),
 

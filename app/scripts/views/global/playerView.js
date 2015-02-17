@@ -9,18 +9,47 @@ define([
   var Player = Backbone.View.extend({
 
     playerSprite: null,
-    walkSpeed: 4,
+    keys: null,
+    walkSpeed: 3,
+    stopSpeed: 1,
+    stopRate: 3, // number of frames to skip for slowdown interval
+    dir: { x: 0, y: 0 },
+    vel: { x: 0, y: 0 },
+    maxVelocity: 3,
 
     initialize: function (params) {
       this.env = params.env;
       this.render();
       this.listenTo(Backbone, 'regen', this.render);
       this.listenTo(Backbone, 'keysChanged', this.keysChanged);
+      this.listenTo(Backbone, 'step', this.step);
+    },
+
+    step: function (frame) {
+      if (this.canMove()) {
+        this.playerSprite.position.x += (this.dir.x * this.vel.x);
+        this.playerSprite.position.y += (this.dir.y * this.vel.y);
+      }
+
+      if (!(frame % this.stopRate) && this.noKeys()) { // slow down every this.slowRate
+        this.vel.x = (this.vel.x > 0 ? this.vel.x - this.stopSpeed : this.vel.x);
+        this.vel.y = (this.vel.y > 0 ? this.vel.y - this.stopSpeed : this.vel.y);
+      }
+    },
+
+    noKeys: function () {
+      var keys = [];
+      _.each(this.keys, function (key) {
+        key && keys.push(key);
+      });
+      return !keys.length;
     },
 
     keysChanged: function (keys) {
+      this.keys = keys;
+      if (this.noKeys()) { return }; // don't cease movement immediately by zeroing out the dir vector
       var dir = { x: 0, y: 0 };
-      // keys in opposite direction neutralize movement
+      // keys in opposite direction do nothing
       if ((keys.left && keys.right) || (keys.up && keys.down)) {
         return;
       }
@@ -30,29 +59,13 @@ define([
       if (keys.up || keys.down) { // vertical
         dir.y = keys.up ? -1: 1;
       }
-      if (this.canMove(dir)) {
-        this.move(dir);
-      }
+      this.dir = dir;
+      this.setVelocity();
     },
 
-    canMove: function (dir) {
-      var potentialCoords = {
-        x: this.playerSprite.position.x + (dir.x * this.walkSpeed),
-        y: this.playerSprite.position.y + (dir.y * this.walkSpeed),
-      };
-
-      var xMult = potentialCoords.x / MAIN.renderer.width;
-      var yMult = potentialCoords.y / MAIN.renderer.height;
-
-      var x = Math.round(xMult * this.env.mapWidth);
-      var y = Math.round(yMult * this.env.mapHeight);
-      var potentialMapSpot = this.env.map[y][x];
-      return !potentialMapSpot;
-    },
-
-    move: function (dir) {
-      this.playerSprite.position.x += (dir.x * this.walkSpeed);
-      this.playerSprite.position.y += (dir.y * this.walkSpeed);
+    setVelocity: function () {
+      this.vel.x = Math.min(this.vel.x + this.walkSpeed, this.maxVelocity);
+      this.vel.y = Math.min(this.vel.y + this.walkSpeed, this.maxVelocity);
     },
 
     render: function () {
@@ -79,6 +92,21 @@ define([
         empty = !this.env.map[x][y];
       }
       return { x: x, y: y };
+    },
+
+    canMove: function () {
+      var potentialCoords = {
+        x: this.playerSprite.position.x + (this.dir.x * this.walkSpeed),
+        y: this.playerSprite.position.y + (this.dir.y * this.walkSpeed),
+      };
+
+      var xMult = potentialCoords.x / MAIN.renderer.width;
+      var yMult = potentialCoords.y / MAIN.renderer.height;
+
+      var x = Math.round(xMult * this.env.mapWidth);
+      var y = Math.round(yMult * this.env.mapHeight);
+      var potentialMapSpot = this.env.map[y][x];
+      return !potentialMapSpot;
     }
 
   });
