@@ -9,8 +9,8 @@ define([
   var DungeonGenerator = Backbone.View.extend({
 
     map: [[]],
-    mapWidth: 72,
-    mapHeight: 48,
+    mapWidth: Config.renderer.width / 8,
+    mapHeight: Config.renderer.height / 8,
     initialWallChance: 0.4,
     becomeEmptyLimit: 3,
     becomeWallLimit: 4,

@@ -26,7 +26,7 @@ define([
     },
 
     step: function (frame) {
-      if (this.canMove()) {
+      if (this.vel.x > 0 && this.vel.y > 0 &&   this.canMove()) {
         this.playerSprite.position.x += (this.dir.x * this.vel.x);
         this.playerSprite.position.y += (this.dir.y * this.vel.y);
       }
