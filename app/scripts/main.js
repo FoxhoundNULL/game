@@ -24,14 +24,21 @@ requirejs([
   'views/mainView',
   'views/global/controlsView',
   'views/misc/dungeonGeneratorView',
-  'views/global/PlayerView',
-], function (_, $, Backbone, PIXI, Main, Controls, DungeonGenerator, Player) {
+  'views/characters/PlayerView',
+  'views/characters/EnemyView'
+], function (_, $, Backbone, PIXI, Main, Controls, DungeonGenerator, Player, Enemy) {
 
   window.MAIN = new Main();
 
   new Controls();
+
   var dungeon = new DungeonGenerator();
+
   new Player({
+    env: dungeon
+  });
+
+  new Enemy({
     env: dungeon
   });
 

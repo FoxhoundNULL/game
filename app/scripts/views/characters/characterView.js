@@ -6,29 +6,38 @@ define([
   'utils'
 ], function (_, $, Backbone, PIXI, Utils) {
 
-  var Player = Backbone.View.extend({
+  var Character = Backbone.View.extend({
 
-    playerSprite: null,
+    type: null,
+    sprite: null,
     keys: null,
-    walkSpeed: 3,
-    stopSpeed: 1,
+
+    // movement
+    walkSpeed: 3, // velocity increase amount
+    stopSpeed: 1, // kind of like brake strength
     stopRate: 3, // number of frames to skip for slowdown interval
+    maxVelocity: 3, // max speed
+    collision: false, // can collide with walls?
     dir: { x: 0, y: 0 },
     vel: { x: 0, y: 0 },
-    maxVelocity: 3,
 
     initialize: function (params) {
       this.env = params.env;
+      this.type = params.type;
+      this.collision = params.collision;
       this.render();
+
       this.listenTo(Backbone, 'regen', this.render);
-      this.listenTo(Backbone, 'keysChanged', this.keysChanged);
       this.listenTo(Backbone, 'step', this.step);
+      this.setAdditionalListeners();
     },
 
+    setAdditionalListeners: function () { /* override this if you want more listeners */ },
+
     step: function (frame) {
-      if (this.vel.x > 0 && this.vel.y > 0 &&   this.canMove()) {
-        this.playerSprite.position.x += (this.dir.x * this.vel.x);
-        this.playerSprite.position.y += (this.dir.y * this.vel.y);
+      if ((this.vel.x > 0 && this.vel.y > 0) && (!this.collision || this.canMove())) {
+        this.sprite.position.x += (this.dir.x * this.vel.x);
+        this.sprite.position.y += (this.dir.y * this.vel.y);
       }
 
       if (!(frame % this.stopRate) && this.noKeys()) { // slow down every this.slowRate
@@ -42,7 +51,7 @@ define([
       _.each(this.keys, function (key) {
         key && keys.push(key);
       });
-      return !keys.length;
+      return this.keys && !keys.length;
     },
 
     keysChanged: function (keys) {
@@ -70,16 +79,15 @@ define([
 
     render: function () {
       pos = this.findSpawn();
-      console.log(pos);
       var x = this.env.tileOffsetX * pos.y;
       var y = this.env.tileOffsetY * pos.x;
-      this.playerSprite = new PIXI.Sprite.fromImage('../../assets/images/player.png');
+      this.sprite = new PIXI.Sprite.fromImage('../../assets/images/player.png');
 
-      this.playerSprite.position.x = x;
-      this.playerSprite.position.y = y;
-      this.playerSprite.scale.set(0.25, 0.25);
+      this.sprite.position.x = x;
+      this.sprite.position.y = y;
+      this.sprite.scale.set(0.25, 0.25);
 
-      MAIN.stage.addChild(this.playerSprite);
+      MAIN.stage.addChild(this.sprite);
     },
 
     findSpawn: function () {
@@ -95,9 +103,11 @@ define([
     },
 
     canMove: function () {
+      console.log('canmove');
+      if (!this.collision) { return true };
       var potentialCoords = {
-        x: this.playerSprite.position.x + (this.dir.x * this.walkSpeed),
-        y: this.playerSprite.position.y + (this.dir.y * this.walkSpeed),
+        x: this.sprite.position.x + (this.dir.x * this.vel.x),
+        y: this.sprite.position.y + (this.dir.y * this.vel.y),
       };
 
       var xMult = potentialCoords.x / MAIN.renderer.width;
@@ -110,5 +120,5 @@ define([
     }
 
   });
-  return Player;
+  return Character;
 });
