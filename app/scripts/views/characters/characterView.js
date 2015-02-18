@@ -18,10 +18,13 @@ define([
     stopRate: 3, // number of frames to skip for slowdown interval
     maxVelocity: 3, // max speed
     collision: false, // can collide with walls?
-    dir: { x: 0, y: 0 },
-    vel: { x: 0, y: 0 },
-    pos: { x: 0, y: 0 },
-    radius: 5,
+    dir: { x: 0, y: 0 }, // direction
+    vel: { x: 0, y: 0 }, // velocity
+
+    // these are needed for collision detection, see collisionDetectorView
+    dim: { x: 3, y: 3 }, // dimension
+    pos: { x: 0, y: 0 }, // position
+    col: { cells: [] }, // collision info
 
     initialize: function (params) {
       this.env = params.env;
@@ -89,7 +92,7 @@ define([
       this.sprite.position.y = y;
       this.sprite.scale.set(0.25, 0.25);
 
-      this.position = this.sprite.position;
+      this.pos = this.sprite.position;
 
       MAIN.stage.addChild(this.sprite);
     },

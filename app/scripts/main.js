@@ -24,23 +24,27 @@ requirejs([
   'views/mainView',
   'views/global/controlsView',
   'views/misc/dungeonGeneratorView',
+  'views/misc/collisionDetectorView',
   'views/characters/PlayerView',
   'views/characters/EnemyView'
-], function (_, $, Backbone, PIXI, Main, Controls, DungeonGenerator, Player, Enemy) {
+], function (_, $, Backbone, PIXI, Main, Controls, DungeonGenerator, CollisionDetector, Player, Enemy) {
 
   window.MAIN = new Main();
 
-  new Controls();
+  var controls = new Controls();
 
   var dungeon = new DungeonGenerator();
 
-  new Player({
+  var player = new Player({
     env: dungeon
   });
 
-  new Enemy({
+  var enemy = new Enemy({
     env: dungeon
   });
 
+  var collisionDetector = new CollisionDetector({
+    entities: [player, enemy]
+  });
 
 });
