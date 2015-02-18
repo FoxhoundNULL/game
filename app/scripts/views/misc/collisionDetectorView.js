@@ -35,6 +35,9 @@ define([
       _.each(this.entities, _.bind(function (ent) {
         _.each(this.entities, function (ent2) {
           if (ent !== ent2) {
+            // console.log(ent.pos);
+            // console.log(ent2.pos);
+            // console.log('----------------------------------');
             var a = _.map(ent.col.cells, function (cell) { return JSON.stringify(cell); });
             var b = _.map(ent2.col.cells, function (cell) { return JSON.stringify(cell); });
             var intersections = _.intersection(a, b);
@@ -44,7 +47,7 @@ define([
           }
         });
       }, this));
-      return collisions;
+      return collisions; // DEDUPE THIS
     },
 
     setOccupiedCells: function () {

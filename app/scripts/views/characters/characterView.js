@@ -3,10 +3,11 @@ define([
   'jquery',
   'backbone',
   'pixi',
-  'utils'
-], function (_, $, Backbone, PIXI, Utils) {
+  'utils',
+  'helpers/_collidableHelper'
+], function (_, $, Backbone, PIXI, Utils, _CollidableHelper) {
 
-  var Character = Backbone.View.extend({
+  var Character = Backbone.View.extend(_.extend({}, _.clone(_CollidableHelper, true), {
 
     type: null,
     sprite: null,
@@ -20,11 +21,6 @@ define([
     collision: false, // can collide with walls?
     dir: { x: 0, y: 0 }, // direction
     vel: { x: 0, y: 0 }, // velocity
-
-    // these are needed for collision detection, see collisionDetectorView
-    dim: { x: 3, y: 3 }, // dimension
-    pos: { x: 0, y: 0 }, // position
-    col: { cells: [] }, // collision info
 
     initialize: function (params) {
       this.env = params.env;
@@ -126,6 +122,6 @@ define([
       return !potentialMapSpot;
     }
 
-  });
+  }));
   return Character;
 });

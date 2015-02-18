@@ -4,16 +4,12 @@ define([
   'backbone',
   'pixi',
   'utils',
-  'views/characters/CharacterView'
-], function (_, $, Backbone, PIXI, Utils, Character) {
+  'views/characters/characterView',
+  'helpers/_collidableHelper'
+], function (_, $, Backbone, PIXI, Utils, Character, _CollidableHelper) {
 
-  var Enemy = Character.extend({
+  var Enemy = Character.extend(_.extend({}, _.clone(_CollidableHelper, true), {
 
-        // these are needed for collision detection, see collisionDetectorView
-    dim: { x: 11, y: 11 }, // dimension
-    pos: { x: 0, y: 0 }, // position
-    col: { cells: [] }, // collision info
-
-  });
+  }));
   return Enemy;
 });
