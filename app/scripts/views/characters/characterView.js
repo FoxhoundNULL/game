@@ -20,6 +20,8 @@ define([
     collision: false, // can collide with walls?
     dir: { x: 0, y: 0 },
     vel: { x: 0, y: 0 },
+    pos: { x: 0, y: 0 },
+    radius: 5,
 
     initialize: function (params) {
       this.env = params.env;
@@ -86,6 +88,8 @@ define([
       this.sprite.position.x = x;
       this.sprite.position.y = y;
       this.sprite.scale.set(0.25, 0.25);
+
+      this.position = this.sprite.position;
 
       MAIN.stage.addChild(this.sprite);
     },
