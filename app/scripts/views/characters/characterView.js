@@ -9,7 +9,7 @@ define([
 
   var Character = Backbone.View.extend(_.extend({}, _.clone(_CollidableHelper, true), {
 
-    type: null,
+    charType: null,
     sprite: null,
     keys: null,
 

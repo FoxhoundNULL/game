@@ -9,7 +9,7 @@ define([
 
     keys: {},
 
-    el: $('body'),
+    el: $('body'), // so we capture all events
 
     events: {
       'keydown': 'keyAction',

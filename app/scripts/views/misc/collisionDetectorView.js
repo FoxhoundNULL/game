@@ -35,19 +35,22 @@ define([
       _.each(this.entities, _.bind(function (ent) {
         _.each(this.entities, function (ent2) {
           if (ent !== ent2) {
-            // console.log(ent.pos);
-            // console.log(ent2.pos);
-            // console.log('----------------------------------');
+            // using JSON.stringify to get arrays suitable for passing to _.intersection feels dirty
+            // there is probably a more performant solution
             var a = _.map(ent.col.cells, function (cell) { return JSON.stringify(cell); });
             var b = _.map(ent2.col.cells, function (cell) { return JSON.stringify(cell); });
             var intersections = _.intersection(a, b);
-            if (intersections.length) {
-              collisions.push([ent, ent2]);
+            if (intersections.length) { // if the collider matrices intersect
+              // if previous intersection isn't logically the same as this one
+              // using _.isEqual instead of _.contains because we need deep comparison
+              if (!_.isEqual(collisions[collisions.length - 1], [ent2, ent])) {
+                collisions.push([ent, ent2]);
+              }
             }
           }
         });
       }, this));
-      return collisions; // DEDUPE THIS
+      return collisions;
     },
 
     setOccupiedCells: function () {

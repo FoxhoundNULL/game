@@ -10,16 +10,12 @@ define([
 
   var Player = Character.extend(_.extend({}, _.clone(_CollidableHelper, true), {
 
-    collision: false,
+    charType: 'friendly',
+
+    collision: false, // can't collide with walls
 
     setAdditionalListeners: function () {
       this.listenTo(Backbone, 'keysChanged', this.keysChanged);
-      this.listenTo(Backbone, 'collision', this.collided);
-    },
-
-    collided: function (entities) {
-      console.log('COLLISION');
-      console.log(entities);
     }
   }));
   return Player;

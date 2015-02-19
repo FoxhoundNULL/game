@@ -10,6 +10,8 @@ define([
 
   var Enemy = Character.extend(_.extend({}, _.clone(_CollidableHelper, true), {
 
+    charType: 'enemy'
+
   }));
   return Enemy;
 });

@@ -1,3 +1,4 @@
+'use strict';
 
 // Configure loading modules from the lib directory,
 // except for 'app' ones, which are in a sibling
@@ -25,9 +26,12 @@ requirejs([
   'views/global/controlsView',
   'views/misc/dungeonGeneratorView',
   'views/misc/collisionDetectorView',
+  'views/misc/gameManagerView',
+  'views/misc/battleManagerView',
   'views/characters/PlayerView',
   'views/characters/EnemyView'
-], function (_, $, Backbone, PIXI, Main, Controls, DungeonGenerator, CollisionDetector, Player, Enemy) {
+], function (_, $, Backbone, PIXI, Main, Controls, DungeonGenerator, CollisionDetector, GameManager, BattleManager,
+  Player, Enemy) {
 
   window.MAIN = new Main();
 
@@ -46,5 +50,9 @@ requirejs([
   var collisionDetector = new CollisionDetector({
     entities: [player, enemy]
   });
+
+  var gameManager = new GameManager();
+
+  var battleManager = new BattleManager();
 
 });
