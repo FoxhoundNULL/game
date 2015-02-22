@@ -23,7 +23,7 @@ requirejs([
   'backbone',
   'pixi',
   'views/mainView',
-  'views/global/controlsView',
+  'views/controls/controlsView',
   'views/misc/dungeonGeneratorView',
   'views/misc/collisionDetectorView',
   'views/misc/gameManagerView',
@@ -35,7 +35,10 @@ requirejs([
 
   window.MAIN = new Main();
 
-  var controls = new Controls();
+  MAIN.controls = new Controls({
+    initialControls: 'playerControls' // start player controls initially
+  });
+
 
   var dungeon = new DungeonGenerator();
 

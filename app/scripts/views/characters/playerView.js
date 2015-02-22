@@ -15,7 +15,7 @@ define([
     collision: false, // can't collide with walls
 
     setAdditionalListeners: function () {
-      this.listenTo(Backbone, 'keysChanged', this.keysChanged);
+      this.listenTo(MAIN.controls.playerControls, 'keysChanged', this.keysChanged);
     }
   }));
   return Player;

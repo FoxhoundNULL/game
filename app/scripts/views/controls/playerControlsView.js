@@ -5,22 +5,27 @@ define([
   'pixi'
 ], function (_, $, Backbone, PIXI) {
 
+  // This view keeps track of the state of the keys we care about at all times. We need to do it that way
+  // instead of just triggering on keyup/keydown events so the subscribing views can translate keypresses
+  // into fluid movement. See battleControlsView for an example of keyup/keydown event based triggering
   var PlayerControls = Backbone.View.extend({
 
     keys: {},
 
     el: $('body'), // so we capture all events
 
-    events: {
-      'keydown': 'keyAction',
-      'keyup': 'keyAction'
-    },
-
     initialize: function () {
     },
 
-    keyDown: function (evt) {
-      this.keyEvents[evt.keyCode] && this.keyEvents[evt.keyCode]();
+    start: function () {
+      this.delegateEvents({
+        'keydown': 'keyAction',
+        'keyup': 'keyAction'
+      });
+    },
+
+    stop: function () {
+      this.undelegateEvents();
     },
 
     keyAction: function (evt) {
@@ -28,7 +33,7 @@ define([
       if (keyName) { // if it's a key we care about
         this.keys[keyName] = (evt.type == 'keydown');
       }
-      Backbone.trigger('keysChanged', this.keys);
+      this.trigger('keysChanged', this.keys);
     },
 
     keyNames: {

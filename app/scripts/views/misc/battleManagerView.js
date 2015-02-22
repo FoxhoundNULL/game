@@ -14,6 +14,7 @@ define([
 
     setListeners: function () {
       this.listenTo(Backbone, 'battleStart', this.startBattle);
+      this.listenTo(MAIN.controls.battleControls, 'all', this.keyPressed);
     },
 
     startBattle: function (characters) {
@@ -25,6 +26,10 @@ define([
 
     endBattle: function () {
       this.setListeners(); // listen for additional battles
+    },
+
+    keyPressed: function (key) {
+      console.log(key);
     }
 
   });

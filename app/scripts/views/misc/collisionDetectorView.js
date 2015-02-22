@@ -9,6 +9,7 @@ define([
   var CollisionDetector = Backbone.View.extend({
 
     checkRate: 12, // frames to skip between each check
+    previousCollisions: [],
 
     initialize: function (params) {
       this.entities = params.entities;
@@ -23,7 +24,8 @@ define([
     step: function (frame) {
       if (!(frame % this.checkRate)) {
         var collisions = this.getCollisions();
-        if (collisions.length) {
+        if (collisions.length && !_.isEqual(collisions, this.previousCollisions)) {
+          this.previousCollisions = collisions;
           Backbone.trigger('collision', collisions);
         }
       }
