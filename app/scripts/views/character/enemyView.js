@@ -6,8 +6,9 @@ define([
   'utils',
   'views/character/characterView',
   'views/character/characterStatisticsView',
+  'views/character/characterMovesView',
   'helpers/_collidableHelper'
-], function (_, $, Backbone, PIXI, Utils, Character, CharacterStatistics, _CollidableHelper) {
+], function (_, $, Backbone, PIXI, Utils, Character, CharacterStatistics, CharacterMoves, _CollidableHelper) {
   'use strict';
 
   var Enemy = Character.extend(_.extend({}, _.clone(_CollidableHelper, true), {
@@ -17,6 +18,23 @@ define([
     stats: new CharacterStatistics({
       hp: 150,
       attack: 20
+    }),
+
+    moves: new CharacterMoves({
+      attacks: [
+        {
+          displayName: 'Pinch',
+          dmgMult: 0.7
+        },
+        {
+          displayName: 'Weak Punch',
+          dmgMult: 1.0
+        },
+        {
+          displayName: 'Hard Kick',
+          dmgMult: 1.3
+        }
+      ]
     }),
 
     image: '../../assets/images/characters/enemy.png',

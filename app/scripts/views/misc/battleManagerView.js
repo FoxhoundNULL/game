@@ -43,6 +43,8 @@ define([
       console.log(key);
       _.each(this.characters, function (char) {
         console.log(char.stats);
+        console.log(char.moves);
+        console.log('--------------------');
       }, this);
     },
 

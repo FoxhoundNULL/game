@@ -5,8 +5,9 @@ define([
   'pixi',
   'utils',
   'views/character/characterStatisticsView',
+  'views/character/characterMovesView',
   'helpers/_collidableHelper'
-], function (_, $, Backbone, PIXI, Utils, CharacterStatistics, _CollidableHelper) {
+], function (_, $, Backbone, PIXI, Utils, CharacterStatistics, CharacterMoves, _CollidableHelper) {
   'use strict';
 
   var Character = Backbone.View.extend(_.extend({}, _.clone(_CollidableHelper, true), {
@@ -17,6 +18,7 @@ define([
     scale: { x: 1, y: 1 },
 
     stats: new CharacterStatistics(),
+    moves: new CharacterMoves(),
 
     // movement
     walkSpeed: 3, // velocity increase amount
