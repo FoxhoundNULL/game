@@ -5,6 +5,7 @@ define([
   'pixi',
   'config'
 ], function (_, $, Backbone, PIXI, Config) {
+  'use strict';
 
   var Main = Backbone.View.extend({
 
@@ -19,7 +20,7 @@ define([
     },
 
     render: function () {
-      document.body.appendChild(this.renderer.view);
+      $('#game')[0].appendChild(this.renderer.view);
 
       // set up animation loop
       requestAnimFrame(step);

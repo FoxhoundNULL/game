@@ -28,8 +28,8 @@ requirejs([
   'views/misc/collisionDetectorView',
   'views/misc/gameManagerView',
   'views/misc/battleManagerView',
-  'views/characters/PlayerView',
-  'views/characters/EnemyView'
+  'views/character/PlayerView',
+  'views/character/EnemyView'
 ], function (_, $, Backbone, PIXI, Main, Controls, DungeonGenerator, CollisionDetector, GameManager, BattleManager,
   Player, Enemy) {
 

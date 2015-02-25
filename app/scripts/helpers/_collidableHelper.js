@@ -3,14 +3,14 @@ define([
   'jquery',
   'backbone',
   'pixi',
-  'utils',
-  'views/characters/CharacterView'
-], function (_, $, Backbone, PIXI, Utils, Character) {
+  'utils'
+], function (_, $, Backbone, PIXI, Utils) {
+  'use strict';
 
   return {
     // these are needed for collision detection, see collisionDetectorView
-    dim: { x: 13, y: 13 }, // dimension
+    dim: { x: 15, y: 15 }, // dimension
     pos: { x: 0, y: 0 }, // position
     col: { cells: [] }, // collision info
-  }
+  };
 });

@@ -27,7 +27,7 @@ define([
 
       this.drawStage();
       this.drawCharacters();
-
+      this.drawMenu();
 
       // this.endBattle();
     },
@@ -41,6 +41,9 @@ define([
 
     keyPressed: function (key) {
       console.log(key);
+      _.each(this.characters, function (char) {
+        console.log(char.stats);
+      }, this);
     },
 
     drawStage: function () {
@@ -54,7 +57,7 @@ define([
     },
 
     drawCharacters: function () {
-      _.each(this.characters, _.bind(function (char) {
+      _.each(this.characters, function (char) {
         console.log('char');
         var sprite = new PIXI.Sprite.fromImage(char.image);
 
@@ -63,7 +66,11 @@ define([
 
         MAIN.stage.addChild(sprite);
         this.sprites.push(sprite);
-      }, this));
+      }, this);
+    },
+
+    drawMenu: function () {
+
     },
 
     getCharacterPosition: function (char, sprite) {

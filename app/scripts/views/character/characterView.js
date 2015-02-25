@@ -4,16 +4,19 @@ define([
   'backbone',
   'pixi',
   'utils',
+  'views/character/characterStatisticsView',
   'helpers/_collidableHelper'
-], function (_, $, Backbone, PIXI, Utils, _CollidableHelper) {
+], function (_, $, Backbone, PIXI, Utils, CharacterStatistics, _CollidableHelper) {
   'use strict';
 
   var Character = Backbone.View.extend(_.extend({}, _.clone(_CollidableHelper, true), {
 
     charType: null,
+
     image: '../../assets/images/characters/bunny.png',
     scale: { x: 1, y: 1 },
-    keys: null,
+
+    stats: new CharacterStatistics(),
 
     // movement
     walkSpeed: 3, // velocity increase amount
@@ -23,6 +26,7 @@ define([
     collision: false, // can collide with walls?
     dir: { x: 0, y: 0 }, // direction
     vel: { x: 0, y: 0 }, // velocity
+    keys: null, // tracks keyboard state
 
     initialize: function (params) {
       this.env = params.env;
