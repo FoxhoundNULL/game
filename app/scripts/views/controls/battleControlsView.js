@@ -1,9 +1,9 @@
 define([
   'lodash',
   'jquery',
-  'backbone',
-  'pixi'
-], function (_, $, Backbone, PIXI) {
+  'backbone'
+], function (_, $, Backbone) {
+  'use strict';
 
   // Battles don't require fluid controls so we can just trigger on keyup/keydown events.
   // See playerControlsView for an example of tracking key state for fluid movements

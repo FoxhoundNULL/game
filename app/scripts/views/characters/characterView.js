@@ -6,11 +6,13 @@ define([
   'utils',
   'helpers/_collidableHelper'
 ], function (_, $, Backbone, PIXI, Utils, _CollidableHelper) {
+  'use strict';
 
   var Character = Backbone.View.extend(_.extend({}, _.clone(_CollidableHelper, true), {
 
     charType: null,
-    sprite: null,
+    image: '../../assets/images/characters/bunny.png',
+    scale: { x: 1, y: 1 },
     keys: null,
 
     // movement
@@ -26,6 +28,7 @@ define([
       this.env = params.env;
       this.type = params.type;
       this.collision = params.collision;
+      this.sprite = new PIXI.Sprite.fromImage(this.image),
       this.render();
 
       this.listenTo(Backbone, 'regen', this.render);
@@ -50,14 +53,14 @@ define([
     noKeys: function () {
       var keys = [];
       _.each(this.keys, function (key) {
-        key && keys.push(key);
+        if (key) { keys.push(key); }
       });
       return this.keys && !keys.length;
     },
 
     keysChanged: function (keys) {
       this.keys = keys;
-      if (this.noKeys()) { return }; // don't cease movement immediately by zeroing out the dir vector
+      if (this.noKeys()) { return; } // don't cease movement immediately by zeroing out the dir vector
       var dir = { x: 0, y: 0 };
       // keys in opposite direction do nothing
       if ((keys.left && keys.right) || (keys.up && keys.down)) {
@@ -79,14 +82,13 @@ define([
     },
 
     render: function () {
-      pos = this.findSpawn();
+      var pos = this.findSpawn();
       var x = this.env.tileOffsetX * pos.y;
       var y = this.env.tileOffsetY * pos.x;
-      this.sprite = new PIXI.Sprite.fromImage('../../assets/images/player.png');
 
       this.sprite.position.x = x;
       this.sprite.position.y = y;
-      this.sprite.scale.set(0.25, 0.25);
+      this.sprite.scale.set(this.scale.x, this.scale.y);
 
       this.pos = this.sprite.position;
 
@@ -97,9 +99,10 @@ define([
       var width = this.env.mapWidth;
       var height = this.env.mapHeight;
       var empty = false;
+      var x, y;
       while (!empty) {
-        var x = Utils.randIntWithinRangeInclusive(0, height - 1);
-        var y = Utils.randIntWithinRangeInclusive(0, width - 1);
+        x = Utils.randIntWithinRangeInclusive(0, height - 1);
+        y = Utils.randIntWithinRangeInclusive(0, width - 1);
         empty = !this.env.map[x][y];
       }
       return { x: x, y: y };
@@ -107,7 +110,7 @@ define([
 
     canMove: function () {
       console.log('canmove');
-      if (!this.collision) { return true };
+      if (!this.collision) { return true; }
       var potentialCoords = {
         x: this.sprite.position.x + (this.dir.x * this.vel.x),
         y: this.sprite.position.y + (this.dir.y * this.vel.y),

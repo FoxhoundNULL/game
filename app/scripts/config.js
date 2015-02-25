@@ -4,6 +4,7 @@ define([
   'backbone',
   'pixi'
 ], function (_, $, Backbone, PIXI) {
+  'use strict';
 
   return {
     stageColor: 0xDDDDDD,
@@ -11,6 +12,6 @@ define([
       width: 720,
       height: 480
     }
-  }
+  };
 
 });

@@ -39,7 +39,6 @@ requirejs([
     initialControls: 'playerControls' // start player controls initially
   });
 
-
   var dungeon = new DungeonGenerator();
 
   var player = new Player({
