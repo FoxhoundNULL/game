@@ -19,7 +19,7 @@ define([
       this.controls = MAIN.controls.battleControls;
 
       this.listenTo(Backbone, 'battleStart', this.startBattle);
-      // this.listenTo(this.controls, 'all', this.keyPressed);
+      this.listenTo(this, 'characterDied', this.characterDied);
     },
 
     startBattle: function (characters) {
@@ -30,25 +30,17 @@ define([
       this.drawStage();
       this.drawCharacters();
       this.drawMenus();
-
-      // this.endBattle();
     },
 
     endBattle: function () {
-      this.listenTo(Backbone, 'battleStart', this.startBattle);
-      this.stopListening(this.controls, 'all');
-      console.log(this.sprites);
       _.each(this.sprites, function (spr) { MAIN.stage.removeChild(spr); });
-    },
+      _.invoke(this.menus, 'remove');
+      this.menus = [];
+      this.sprites = [];
+      this.characters = [];
 
-    // keyPressed: function (key) {
-    //   console.log(key);
-    //   // _.each(this.characters, function (char) {
-    //   //   console.log(char.stats);
-    //   //   console.log(char.moves);
-    //   //   console.log('--------------------');
-    //   // }, this);
-    // },
+      this.listenTo(Backbone, 'battleStart', this.startBattle); // battle over, listen for more
+    },
 
     drawStage: function () {
       this.stageSprite.position.x = 0;
@@ -85,17 +77,26 @@ define([
             y: (MAIN.renderer.height - menu.getHeight())
           });
 
-          this.listenTo(menu, 'select', this.makeMove);
-          this.menus[char.cid] = menu;
+          this.listenTo(menu, 'select', this.moveSelected);
           menu.show();
+          this.menus.push(menu);
         }
       }, this);
     },
 
-    makeMove: function (character, move) {
+    moveSelected: function (character, move) {
+      var opponent = _.find(this.characters, function(char) { return char.cid != character.cid; });
+      opponent.stats.hp = Math.max(opponent.stats.hp - (character.stats.attack * move.dmgMult), 0);
+      console.log('opponent health ' + opponent.stats.hp);
+      if (opponent.stats.hp <= 0) {
+        this.trigger('characterDied', opponent);
+      }
+    },
+
+    characterDied: function (character) {
+      console.log('DIED: ');
       console.log(character);
-      console.log('MAKING MOVE');
-      console.log(move);
+      this.endBattle();
     },
 
     getCharacterPosition: function (char, sprite) {

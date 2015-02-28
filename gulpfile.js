@@ -9,7 +9,7 @@ var concatCss = require('gulp-concat-css');
 var reload = browserSync.reload;
 
 var compileAndConcatCss = function () {
-  console.log('compiling');
+  console.log('Compiling and concatenating styles.');
   // compile sass to css
   gulp.src('app/styles/**/*.scss')
     .pipe(sass()) // compile to css
@@ -18,6 +18,7 @@ var compileAndConcatCss = function () {
 };
 
 var startServer = function () {
+  console.log('Starting server.');
   browserSync({
     server: {
       baseDir: 'app'
