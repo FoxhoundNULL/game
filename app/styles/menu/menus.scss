@@ -1,4 +1,12 @@
 .menu {
   position: absolute;
-  background: #ccc;
+  background: #aaa;
+
+  .menuOption {
+    padding: 5px;
+
+    &[data-selected="true"] {
+      border: 2px solid #fff;
+    }
+  }
 }

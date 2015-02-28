@@ -15,8 +15,8 @@
 
     <script type="text/template" class="template" data-template-name="characterMovesMenu">
       <div class="menu characterMovesMenu hidden">
-        <% _.each(moves, function (move) { %>
-          <div class="menuOption move <%= move.classes %>">
+        <% _.each(moves, function (move, i) { %>
+          <div class="menuOption move <%= move.classes %>" data-index="<%= i %>" data-move-type="<%= move.type %>" data-selected="<%= i ? false : true %>">
             <%= move.displayName %>
           </div>
         <% }); %>

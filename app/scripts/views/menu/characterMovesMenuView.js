@@ -4,7 +4,7 @@ define([
   'backbone',
   'pixi',
   'utils'
-], function (_, $, Backbone, PIXI, Utils) {
+], function (_, $, Backbone) {
   'use strict';
 
   var CharacterMovesMenu = Backbone.View.extend({
@@ -22,8 +22,9 @@ define([
     },
 
     generateMarkup: function () {
+
       this.$el = $(this.template({
-        moves: this.character.moves.attacks
+        moves: this.character.moves.moves
       })).appendTo('#menus');
     },
 
@@ -35,13 +36,31 @@ define([
       this.$el.addClass('hidden');
     },
 
-    // pos: { x: 0, y: 0 }
     setPosition: function (pos) {
-
+      this.$el.css({
+        left: pos.x,
+        top: pos.y
+      });
     },
 
-    keyPressed: function (key) {
+    getWidth: function () { return this.$el.width(); },
+    getHeight: function () { return this.$el.height(); },
 
+    keyPressed: function (key) {
+      var curr = this.$el.find('> .move[data-selected="true"]');
+      if (key == 'up' || key == 'down') {
+        curr.attr('data-selected', false);
+        var next = null;
+
+        if (key == 'up') {
+          next = curr.prev().length ? curr.prev() : this.$el.find('> .move:last-child');
+        } else if (key == 'down') {
+          next = curr.next().length ? curr.next() : this.$el.find('> .move:first-child');
+        }
+        next.attr('data-selected', true);
+      } else if (key == 'select') {
+        this.trigger('select', this.character, this.character.moves.moves[curr.attr('data-index')]);
+      }
     }
   });
   return CharacterMovesMenu;

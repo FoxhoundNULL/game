@@ -21,16 +21,19 @@ define([
     }),
 
     moves: new CharacterMoves({
-      attacks: [
+      moves: [
         {
+          type: 'attack',
           displayName: 'Backhand Slap',
           dmgMult: 1.1
         },
         {
+          type: 'attack',
           displayName: 'Medium Punch',
           dmgMult: 1.2
         },
         {
+          type: 'attack',
           displayName: 'Light Kick',
           dmgMult: 1.0
         }

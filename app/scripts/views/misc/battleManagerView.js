@@ -74,18 +74,28 @@ define([
 
     drawMenus: function () {
       _.each(this.characters, function (char) {
-        var menu = new CharacterMovesMenu({
-          character: char,
-          controls: this.controls
-        });
-        this.listenTo(menu, 'select', this.makeMove);
-        this.menus[char.cid] = menu;
-        menu.show();
+        if (char.charType == 'friendly') {
+          var menu = new CharacterMovesMenu({
+            character: char,
+            controls: this.controls
+          });
+
+          menu.setPosition({ // bottom left
+            x: 0,
+            y: (MAIN.renderer.height - menu.getHeight())
+          });
+
+          this.listenTo(menu, 'select', this.makeMove);
+          this.menus[char.cid] = menu;
+          menu.show();
+        }
       }, this);
     },
 
-    makeMove: function () {
-
+    makeMove: function (character, move) {
+      console.log(character);
+      console.log('MAKING MOVE');
+      console.log(move);
     },
 
     getCharacterPosition: function (char, sprite) {

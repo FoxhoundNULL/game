@@ -10,5 +10,13 @@ body {
 }
 .menu {
   position: absolute;
-  background: #ccc;
+  background: #aaa;
+}
+
+.menu .menuOption {
+  padding: 5px;
+}
+
+.menu .menuOption[data-selected="true"] {
+  border: 2px solid #fff;
 }

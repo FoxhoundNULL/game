@@ -7,16 +7,19 @@ define([
 
   var CharacterMoves = Backbone.View.extend({
 
-    attacks: [
+    moves: [
       {
+        type: 'attack',
         displayName: 'Slap',
         dmgMult: 0.9
       },
       {
+        type: 'attack',
         displayName: 'Punch',
         dmgMult: 1.1
       },
       {
+        type: 'attack',
         displayName: 'Kick',
         dmgMult: 1.2
       }
@@ -27,7 +30,6 @@ define([
         this[key] = val;
       }, this);
     }
-
   });
   return CharacterMoves;
 });
