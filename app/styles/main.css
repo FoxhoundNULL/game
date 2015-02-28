@@ -1,3 +1,14 @@
 .debugPanel {
   height: 100px;
 }
+body {
+  margin: 0;
+}
+
+.hidden {
+  display: none;
+}
+.menu {
+  position: absolute;
+  background: #ccc;
+}

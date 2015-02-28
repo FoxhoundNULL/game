@@ -2,8 +2,9 @@ define([
   'lodash',
   'jquery',
   'backbone',
+  'views/menu/characterMovesMenuView',
   'pixi'
-], function (_, $, Backbone, PIXI) {
+], function (_, $, Backbone, CharacterMovesMenu, PIXI) {
   'use strict';
 
   var BattleManager = Backbone.View.extend({
@@ -12,12 +13,13 @@ define([
     controls: null,
     sprites: [], // all sprites should be added to this so they can be removed on cleanup
     characters: [],
+    menus: [],
 
     initialize: function (params) {
       this.controls = MAIN.controls.battleControls;
 
       this.listenTo(Backbone, 'battleStart', this.startBattle);
-      this.listenTo(this.controls, 'all', this.keyPressed);
+      // this.listenTo(this.controls, 'all', this.keyPressed);
     },
 
     startBattle: function (characters) {
@@ -27,7 +29,7 @@ define([
 
       this.drawStage();
       this.drawCharacters();
-      this.drawMenu();
+      this.drawMenus();
 
       // this.endBattle();
     },
@@ -39,14 +41,14 @@ define([
       _.each(this.sprites, function (spr) { MAIN.stage.removeChild(spr); });
     },
 
-    keyPressed: function (key) {
-      console.log(key);
-      _.each(this.characters, function (char) {
-        console.log(char.stats);
-        console.log(char.moves);
-        console.log('--------------------');
-      }, this);
-    },
+    // keyPressed: function (key) {
+    //   console.log(key);
+    //   // _.each(this.characters, function (char) {
+    //   //   console.log(char.stats);
+    //   //   console.log(char.moves);
+    //   //   console.log('--------------------');
+    //   // }, this);
+    // },
 
     drawStage: function () {
       this.stageSprite.position.x = 0;
@@ -60,7 +62,6 @@ define([
 
     drawCharacters: function () {
       _.each(this.characters, function (char) {
-        console.log('char');
         var sprite = new PIXI.Sprite.fromImage(char.image);
 
         sprite.scale.set(char.scale.x * 5, char.scale.y * 5);
@@ -71,7 +72,19 @@ define([
       }, this);
     },
 
-    drawMenu: function () {
+    drawMenus: function () {
+      _.each(this.characters, function (char) {
+        var menu = new CharacterMovesMenu({
+          character: char,
+          controls: this.controls
+        });
+        this.listenTo(menu, 'select', this.makeMove);
+        this.menus[char.cid] = menu;
+        menu.show();
+      }, this);
+    },
+
+    makeMove: function () {
 
     },
 

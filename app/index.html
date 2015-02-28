@@ -12,6 +12,16 @@
         <div class="lastAction" />
       </div>
     </script>
+
+    <script type="text/template" class="template" data-template-name="characterMovesMenu">
+      <div class="menu characterMovesMenu hidden">
+        <% _.each(moves, function (move) { %>
+          <div class="menuOption move <%= move.classes %>">
+            <%= move.displayName %>
+          </div>
+        <% }); %>
+      </div>
+    </script>
     <!-- END TEMPLATES -->
 
     <div id="game"></div>

@@ -23,9 +23,9 @@ define([
     ],
 
     initialize: function (params) {
-      _.each(params, _.bind(function (val, key) {
+      _.each(params, function (val, key) {
         this[key] = val;
-      }, this));
+      }, this);
     }
 
   });

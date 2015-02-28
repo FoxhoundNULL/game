@@ -34,7 +34,7 @@ define([
     getCollisions: function () {
       this.setOccupiedCells();
       var collisions = [];
-      _.each(this.entities, _.bind(function (ent) {
+      _.each(this.entities, function (ent) {
         _.each(this.entities, function (ent2) {
           if (ent !== ent2) {
             // using JSON.stringify to get arrays suitable for passing to _.intersection feels dirty
@@ -51,7 +51,7 @@ define([
             }
           }
         });
-      }, this));
+      }, this);
       return collisions;
     },
 
