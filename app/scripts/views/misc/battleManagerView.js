@@ -3,8 +3,9 @@ define([
   'jquery',
   'backbone',
   'views/menu/characterMovesMenuView',
+  'views/character/characterAiView',
   'pixi'
-], function (_, $, Backbone, CharacterMovesMenu, PIXI) {
+], function (_, $, Backbone, CharacterMovesMenu, CharacterAI, PIXI) {
   'use strict';
 
   var BattleManager = Backbone.View.extend({
@@ -13,19 +14,31 @@ define([
     controls: null,
     sprites: [], // all sprites should be added to this so they can be removed on cleanup
     characters: [],
+    activeCharacter: null, // the character whose turn it is
     menus: [],
 
-    initialize: function (params) {
+    characterAI: null,
+
+    initialize: function () {
       this.controls = MAIN.controls.battleControls;
 
       this.listenTo(Backbone, 'battleStart', this.startBattle);
       this.listenTo(this, 'characterDied', this.characterDied);
     },
 
+    getCharacterOfType: function (type) {
+      return _.find(this.characters, function (char) { return char.charType == type; });
+    },
+
     startBattle: function (characters) {
-      console.log('battle between ' + characters);
-      this.characters = characters;
       this.stopListening(Backbone, 'battleStart'); // battle started, don't listen for more
+      this.characters = characters;
+      this.activeCharacter = this.getCharacterOfType('friendly');
+
+      this.characterAI = new CharacterAI({
+        battleManager: this,
+        character: this.getCharacterOfType('enemy')
+      });
 
       this.drawStage();
       this.drawCharacters();
@@ -86,11 +99,22 @@ define([
 
     moveSelected: function (character, move) {
       var opponent = _.find(this.characters, function(char) { return char.cid != character.cid; });
-      opponent.stats.hp = Math.max(opponent.stats.hp - (character.stats.attack * move.dmgMult), 0);
-      console.log('opponent health ' + opponent.stats.hp);
-      if (opponent.stats.hp <= 0) {
-        this.trigger('characterDied', opponent);
+      this.makeMove(character, opponent, move);
+    },
+
+    makeMove: function (moveMaker, moveReceiver, move) {
+      console.log(moveMaker.charType + ' TURN BEGIN');
+
+      moveReceiver.stats.hp = Math.max(moveReceiver.stats.hp - (moveMaker.stats.attack * move.dmgMult), 0);
+      console.log(moveReceiver.charType + ' health: ' + moveReceiver.stats.hp);
+
+      if (moveReceiver.stats.hp <= 0) {
+        this.trigger('characterDied', moveReceiver);
       }
+
+      console.log(moveMaker.charType + ' TURN END');
+
+      this.trigger('moveMade', moveMaker, moveReceiver);
     },
 
     characterDied: function (character) {
